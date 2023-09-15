@@ -1,57 +1,52 @@
 # CS 271 - String and Integer I/O in MASM
 
-This is the final project for Oregon State's **CS 271 - Computer Architecture and Assembly Language**, which I took in Spring 2023. The project is written in 32-bit MASM assembly for x86-64 processors; it focuses on implementing macros and procedures for string and integer input/output (full project specification below). 271 was one of my absolute favorite courses at OSU, and I still refer back to my notes all the time! 
+This project is a demo in 32-bit MASM assembly for x86-64 processors. It focuses on creating macros and procedures for string and integer input/output and storage. 
 
-## Assignment Description: 
+This was the final project for Oregon State's **CS 271 - Computer Architecture and Assembly Language**, one of my favorite courses in the program. 
 
-Write and test a MASM program to perform the following tasks (check the Requirements section for specifics on program modularization):
+## Usage
 
-### Macros for String Processing
+Upon running `Proj6_lambethw.asm`, users are prompted to input 10 signed decimal integers, in the range `[-2,147,483,648, 2,147,483,647]`. These numbers are read in as strings, then converted to 32-bit integers for storage. Invalid input strings or out-of-range numbers are rejected. 
 
-- Implement and test two macros for string processing. These macros should use Irvine’s ReadString to get input from the user, and WriteString procedures to display output.
-  - `mGetString`: Display a prompt (input parameter, by reference), then get the user’s keyboard input into a memory location (output parameter, by reference). You may also need to provide a count (input parameter, by value) for the length of input string you can accommodate and a provide a number of bytes read (output parameter, by reference) by the macro.
-  - `mDisplayString`: Print the string which is stored in a specified memory location (input parameter, by reference).
+Once 10 valid integers are read, the program calculates the sum and average of the inputs, then reads these values back to the user along with all of the original input values. All operations for string and integer processing are hand-written by the programmer, not relying on any MASM built-in functionality. 
 
-### Procedures for Signed Integers
+## Example Run 
 
-- Implement and test two procedures for signed integers which use string primitive instructions:
-  - `ReadVal`:
-    - Invoke the `mGetString` macro (see parameter requirements above) to get user input in the form of a string of digits.
-    - Convert (using string primitives) the string of ASCII digits to its numeric value representation (SDWORD), validating the user’s input is a valid number (no letters, symbols, etc).
-    - Store this one value in a memory variable (output parameter, by reference).
-  - `WriteVal`:
-    - Convert a numeric SDWORD value (input parameter, by value) to a string of ASCII digits.
-    - Invoke the `mDisplayString` macro to print the ASCII representation of the SDWORD value to the output.
+```
+---- Low-Level I/O ---- A MASM Experience by Will Lambeth ----
+Please provide ten signed decimal integers, between -2,147,483,648 and 2,147,483,647.
+Once you have, I'll read back the numbers, their sum, and their truncated average.
 
-### Test Program (in main)
+Please enter a signed number: 1
+Please enter a signed number: -1
+Please enter a signed number: 4
+Please enter a signed number: -4
+Please enter a signed number: 180,000
+Please enter a signed number: -180,000
+Please enter a signed number: +44
+Please enter a signed number: -42
+Please enter a signed number: 0
+Please enter a signed number: .
+ERROR: Integer invalid or out of range
+Please enter a signed number: 1
 
-- Write a test program (in main) which uses the `ReadVal` and `WriteVal` procedures above to:
-  - Get 10 valid integers from the user. Your `ReadVal` will be called within the loop in main. Do not put your counted loop within `ReadVal`.
-  - Store these numeric values in an array.
-  - Display the integers, their sum, and their truncated average.
-  - Your `ReadVal` will be called within the loop in main. Do not put your counted loop within `ReadVal`.
+You entered the following numbers:
+1
+-1
+4
+-4
+180,000
+-180,000
++44
+-42
+0
+1
 
-### Program Requirements
+Their sum is:
+3
 
-- User’s numeric input must be validated the hard way:
-  - Read the user's input as a string and convert the string to numeric form.
-  - If the user enters non-digits other than something which will indicate sign (e.g. ‘+’ or ‘-‘), or the number is too large for 32-bit registers, an error message should be displayed and the number should be discarded.
-  - If the user enters nothing (empty input), display an error and re-prompt.
-- ReadInt, ReadDec, WriteInt, and WriteDec are not allowed in this program.
-- `mDisplayString` must be used to display all strings.
-- Conversion routines must appropriately use the LODSB and/or STOSB operators for dealing with strings.
-- All procedure parameters must be passed on the runtime stack using the STDCall calling convention (see Module 7, Exploration 1 - Passing Parameters on the Stack). Strings also must be passed by reference.
-- Prompts, identifying strings, and other memory locations must be passed by address to the macros.
-- Used registers must be saved and restored by the called procedures and macros.
-- The stack frame must be cleaned up by the called procedure.
-- Procedures (except main) must not reference data segment variables by name. There is a significant penalty attached to violations of this rule. Some global constants (properly defined using EQU, =, or TEXTEQU and not redefined) are allowed. These must fit the proper role of a constant in a program (master values used throughout a program which, similar to HI and LO in Project 5).
-- The program must use Register Indirect addressing or string primitives (e.g. STOSD) for integer (SDWORD) array elements, and Base+Offset addressing for accessing parameters on the runtime stack.
-- Procedures may use local variables when appropriate.
-- The program must be fully documented and laid out according to the CS271 Style Guide.
-  - This includes a complete header block for identification, description, etc., a comment outline to explain each section of code, and proper procedure headers/documentation.
+And their truncated average is:
+0
 
-### Notes
-
-- For this assignment you are allowed to assume that the total sum of the valid numbers will fit inside a 32 bit register.
-- We will be testing this program with positive and negative values.
-- When displaying the average, only display the integer part (that is, drop/truncate any fractional part).
+Thank you!
+```
